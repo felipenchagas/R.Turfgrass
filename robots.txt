@@ -1,0 +1,15 @@
+User-agent: *
+Allow: 
+User-agent: Googlebot
+Allow: 
+User-agent: Googlebot-Image
+Allow: 
+User-agent: Mediapartners-Google
+Allow: 
+User-agent: Adsbot-Google
+Allow: 
+
+Sitemap: https://www.turfgrass.com.br/sitemap/sitemap.xml
+Sitemap: https://www.turfgrass.com.br/sitemap/sc.xml
+Sitemap: https://www.turfgrass.com.br/sitemap/pr.xml
+Sitemap: https://www.turfgrass.com.br/sitemap/curitiba.xml
