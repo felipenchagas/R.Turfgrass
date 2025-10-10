@@ -208,36 +208,30 @@
 <h3 id="reply-title" class="comment-reply-title">Envie seu orçamento ou dúvida </h3>
 <!-- Inclua esse formulário onde quiser no seu site -->
 <style>
-  /* ===============================
-     Estilos específicos para o formulário
-     =============================== */
-  .cf-wrapper {
+  /* Estilos únicos para evitar conflitos */
+  .cf-wrap {
     max-width: 800px;
     margin: 20px auto;
     padding: 16px;
-    background-color: #fafafa;
+    background: #fafafa;
     border-radius: 8px;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.1);
   }
 
   .cf-row {
- 
+    display: flex;
     flex-wrap: wrap;
     gap: 12px;
   }
-
   .cf-group {
     flex: 1 1 200px;
-    display: flex;
     flex-direction: column;
   }
-
   .cf-group label {
     font-size: 0.9em;
     margin-bottom: 4px;
     color: #444;
   }
-
   .cf-group input {
     padding: 8px;
     border: 1px solid #ccc;
@@ -246,7 +240,6 @@
     width: 100%;
     box-sizing: border-box;
   }
-
   .cf-textarea {
     width: 100%;
     padding: 8px;
@@ -257,7 +250,6 @@
     box-sizing: border-box;
     min-height: 100px;
   }
-
   .cf-submit-btn {
     background-color: #03a84e;
     color: white;
@@ -268,19 +260,31 @@
     cursor: pointer;
     margin-top: 16px;
   }
-
   .cf-submit-btn:hover {
     background-color: #028a43;
   }
 
-  .cf-result {
-    margin-top: 14px;
-    font-size: 0.95em;
+  /* A caixa de mensagem de resultado */
+  .cf-msg {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 1em;
+    display: none; /* escondida por padrão */
+  }
+  .cf-msg-success {
+    background-color: #e6ffed;
+    color: #027a2f;
+    border: 1px solid #0a7a3a;
+  }
+  .cf-msg-error {
+    background-color: #ffe6e6;
+    color: #a80a0a;
+    border: 1px solid #d13030;
   }
 
-  /* ===== Ajustes para telas pequenas ===== */
   @media (max-width: 600px) {
-    .cf-wrapper {
+    .cf-wrap {
       padding: 12px;
     }
     .cf-row {
@@ -296,7 +300,7 @@
   }
 </style>
 
-<div class="cf-wrapper">
+<div class="cf-wrap">
   <form id="cf-form" method="POST" action="https://api.web3forms.com/submit">
     <input type="hidden" name="access_key" value="0f061e1a-6f7e-4aa1-8d52-5e70c1c7d15a">
     <input type="hidden" name="subject" value="Nova mensagem do formulário">
@@ -326,21 +330,29 @@
     </div>
 
     <button type="submit" class="cf-submit-btn">Enviar</button>
-    <div id="cf-result" class="cf-result"></div>
   </form>
+
+  <div id="cf-msg" class="cf-msg"></div>
 </div>
 
 <script>
   document.getElementById("cf-form").addEventListener("submit", function(e) {
     e.preventDefault();
     const form = this;
-    const resultDiv = document.getElementById("cf-result");
+    const msgDiv = document.getElementById("cf-msg");
+
+    // Prepara o envio
     const formData = new FormData(form);
     const obj = Object.fromEntries(formData);
     const json = JSON.stringify(obj);
 
-    resultDiv.style.color = "#333";
-    resultDiv.textContent = "Enviando...";
+    // Mostrar mensagem temporária de “enviando”
+    msgDiv.style.display = "block";
+    msgDiv.className = "cf-msg";  // reseta classes
+    msgDiv.textContent = "Enviando...";
+    msgDiv.style.color = "#444";
+    msgDiv.style.border = "1px solid #ccc";
+    msgDiv.style.backgroundColor = "#f0f0f0";
 
     fetch("https://api.web3forms.com/submit", {
       method: "POST",
@@ -350,24 +362,27 @@
       },
       body: json
     })
-    .then(async response => {
+    .then(async (response) => {
       const res = await response.json();
       if (response.ok) {
-        resultDiv.style.color = "green";
-        resultDiv.textContent = res.message || "Mensagem enviada com sucesso!";
+        // Sucesso
+        msgDiv.className = "cf-msg cf-msg-success";
+        msgDiv.textContent = res.message || "Mensagem enviada com sucesso!";
         form.reset();
       } else {
-        resultDiv.style.color = "red";
-        resultDiv.textContent = res.message || "Erro ao enviar mensagem.";
+        // Erro enviado via API
+        msgDiv.className = "cf-msg cf-msg-error";
+        msgDiv.textContent = res.message || "Erro ao enviar mensagem.";
       }
     })
-    .catch(error => {
-      console.error(error);
-      resultDiv.style.color = "red";
-      resultDiv.textContent = "Erro no envio. Tente novamente.";
+    .catch((error) => {
+      console.error("Erro no envio:", error);
+      msgDiv.className = "cf-msg cf-msg-error";
+      msgDiv.textContent = "Ocorreu um erro na requisição. Tente novamente.";
     });
   });
 </script>
+
 
 
 </div><!-- #respond -->
