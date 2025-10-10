@@ -241,18 +241,167 @@
 <div class="comments-form-wrapper clearfix">
 <div id="respond" class="comment-respond">
 <h3 id="reply-title" class="comment-reply-title">Envie seu orçamento ou dúvida </h3>
-<form method="POST" action="../envia.php" class="comment-form">
-<p class="comment-notes"><span id="email-notes">Responderemos muito rapidamente.</span></p>
-<p class="comment-form-author"><label for="author">Nome <span class="required">*</span></label> <input placeholder="Name * " id="author" name="nomeremetente" type="text" value="" size="30" maxlength="245" required='required' /></p>
-<p class="comment-form-email"><label for="email">Email<span class="required">*</span></label> <input placeholder="Email * email@email.com.br" id="email" name="emailremetente" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" pattern="^[\w]{1,}[\w.+-]{0,}@[\w-]{2,}([.][a-zA-Z]{2,}|[.][\w-]{2,}[.][a-zA-Z]{2,})$" title="Email Invalido" required='required' /></p>
-<p style="width:60px; float:left;" class="comment-form-url"><label for="url">Telefone</label><input placeholder="(00)" id="url" name="ddd" type="text" value="" size="30" pattern="^\d{2}$" maxlength="2"  maxlength="2" required title="SEU DDD Código de Área Exemplo (41)" /></p>
-<p style=" float:left;" class="comment-form-url"><label for="url">Telefone</label><input placeholder="00000000" id="url" name="telefone" type="text" value="" size="30" pattern="^\d{8,9}$" maxlength="9" title="Preencher o Telefone Exemplo: 12345678 ou 123456789" required /></p>
-<p class="comment-form-url"><label for="url">Cidade</label><input placeholder="Cidade" id="url" name="cidade" type="text" value="" size="30" maxlength="200" /></p>
-<p class="comment-form-comment"><label for="comment">Digite aqui detalhes do seu orçamento ou dúvidas</label>
-<textarea placeholder="Digite aqui detalhes do seu orçamento ou dúvidas" id="comment" name="mensagem" cols="45" rows="8" maxlength="65525"></textarea></p>
-<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Enviar" />
-</p>
-</form>
+<style>
+  /* ===============================
+     Estilos específicos para o formulário
+     =============================== */
+  .cf-wrapper {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 16px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .cf-row {
+ 
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .cf-group {
+    flex: 1 1 200px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cf-group label {
+    font-size: 0.9em;
+    margin-bottom: 4px;
+    color: #444;
+  }
+
+  .cf-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95em;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .cf-textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95em;
+    margin-top: 12px;
+    box-sizing: border-box;
+    min-height: 100px;
+  }
+
+  .cf-submit-btn {
+    background-color: #03a84e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+
+  .cf-submit-btn:hover {
+    background-color: #028a43;
+  }
+
+  .cf-result {
+    margin-top: 14px;
+    font-size: 0.95em;
+  }
+
+  /* ===== Ajustes para telas pequenas ===== */
+  @media (max-width: 600px) {
+    .cf-wrapper {
+      padding: 12px;
+    }
+    .cf-row {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cf-group {
+      width: 100%;
+    }
+    .cf-submit-btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="cf-wrapper">
+  <form id="cf-form" method="POST" action="https://api.web3forms.com/submit">
+    <input type="hidden" name="access_key" value="0f061e1a-6f7e-4aa1-8d52-5e70c1c7d15a">
+    <input type="hidden" name="subject" value="Nova mensagem do formulário">
+
+    <div class="cf-row">
+      <div class="cf-group">
+        <label for="cf-name">Nome</label>
+        <input type="text" id="cf-name" name="name" required>
+      </div>
+      <div class="cf-group">
+        <label for="cf-email">Email</label>
+        <input type="email" id="cf-email" name="email" required>
+      </div>
+      <div class="cf-group">
+        <label for="cf-phone">Telefone</label>
+        <input type="text" id="cf-phone" name="phone" required>
+      </div>
+      <div class="cf-group">
+        <label for="cf-city">Cidade</label>
+        <input type="text" id="cf-city" name="city" required>
+      </div>
+    </div>
+
+    <div class="cf-group">
+      <label for="cf-message">Mensagem</label>
+      <textarea id="cf-message" name="message" class="cf-textarea" required></textarea>
+    </div>
+
+    <button type="submit" class="cf-submit-btn">Enviar</button>
+    <div id="cf-result" class="cf-result"></div>
+  </form>
+</div>
+
+<script>
+  document.getElementById("cf-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const form = this;
+    const resultDiv = document.getElementById("cf-result");
+    const formData = new FormData(form);
+    const obj = Object.fromEntries(formData);
+    const json = JSON.stringify(obj);
+
+    resultDiv.style.color = "#333";
+    resultDiv.textContent = "Enviando...";
+
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: json
+    })
+    .then(async response => {
+      const res = await response.json();
+      if (response.ok) {
+        resultDiv.style.color = "green";
+        resultDiv.textContent = res.message || "Mensagem enviada com sucesso!";
+        form.reset();
+      } else {
+        resultDiv.style.color = "red";
+        resultDiv.textContent = res.message || "Erro ao enviar mensagem.";
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      resultDiv.style.color = "red";
+      resultDiv.textContent = "Erro no envio. Tente novamente.";
+    });
+  });
+</script>
 </div><!-- #respond -->
 </div>
 </div>

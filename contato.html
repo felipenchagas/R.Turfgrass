@@ -207,51 +207,57 @@
 <h3 id="reply-title" class="comment-reply-title">Envie seu orçamento ou dúvida </h3>
 <!-- Inclua esse formulário onde quiser no seu site -->
 <style>
-  #contact-form {
+  /* ===============================
+     Estilos específicos para o formulário
+     =============================== */
+  .cf-wrapper {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 16px;
-    background-color: #f9f9f9;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
   }
 
-  #contact-form .form-row {
-    display: flex;
+  .cf-row {
+ 
     flex-wrap: wrap;
     gap: 12px;
   }
 
-  #contact-form .form-row .form-group {
-    flex: 1 1 180px;
+  .cf-group {
+    flex: 1 1 200px;
     display: flex;
     flex-direction: column;
   }
 
-  #contact-form .form-row .form-group label {
+  .cf-group label {
     font-size: 0.9em;
     margin-bottom: 4px;
-    color: #555;
+    color: #444;
   }
 
-  #contact-form .form-row .form-group input {
+  .cf-group input {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 0.95em;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  #contact-form textarea {
+  .cf-textarea {
     width: 100%;
-    min-height: 100px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 0.95em;
     margin-top: 12px;
+    box-sizing: border-box;
+    min-height: 100px;
   }
 
-  #contact-form button {
+  .cf-submit-btn {
     background-color: #03a84e;
     color: white;
     border: none;
@@ -259,68 +265,75 @@
     padding: 10px 20px;
     font-size: 1em;
     cursor: pointer;
-    margin-top: 12px;
+    margin-top: 16px;
   }
 
-  #contact-form button:hover {
+  .cf-submit-btn:hover {
     background-color: #028a43;
   }
 
+  .cf-result {
+    margin-top: 14px;
+    font-size: 0.95em;
+  }
+
+  /* ===== Ajustes para telas pequenas ===== */
   @media (max-width: 600px) {
-    #contact-form .form-row {
-      flex-direction: column;
+    .cf-wrapper {
+      padding: 12px;
     }
-    #contact-form .form-row .form-group {
+    .cf-row {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cf-group {
+      width: 100%;
+    }
+    .cf-submit-btn {
       width: 100%;
     }
   }
-
-  #form-result {
-    margin-top: 12px;
-    font-size: 0.95em;
-  }
 </style>
 
-<form id="contact-form" method="POST" action="https://api.web3forms.com/submit">
-  <input type="hidden" name="access_key" value="0f061e1a-6f7e-4aa1-8d52-5e70c1c7d15a">
-  <input type="hidden" name="subject" value="Nova mensagem do formulário">
+<div class="cf-wrapper">
+  <form id="cf-form" method="POST" action="https://api.web3forms.com/submit">
+    <input type="hidden" name="access_key" value="0f061e1a-6f7e-4aa1-8d52-5e70c1c7d15a">
+    <input type="hidden" name="subject" value="Nova mensagem do formulário">
 
-  <div class="form-row">
-    <div class="form-group">
-      <label for="name">Nome</label>
-      <input type="text" id="name" name="name" required>
+    <div class="cf-row">
+      <div class="cf-group">
+        <label for="cf-name">Nome</label>
+        <input type="text" id="cf-name" name="name" required>
+      </div>
+      <div class="cf-group">
+        <label for="cf-email">Email</label>
+        <input type="email" id="cf-email" name="email" required>
+      </div>
+      <div class="cf-group">
+        <label for="cf-phone">Telefone</label>
+        <input type="text" id="cf-phone" name="phone" required>
+      </div>
+      <div class="cf-group">
+        <label for="cf-city">Cidade</label>
+        <input type="text" id="cf-city" name="city" required>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required>
+    <div class="cf-group">
+      <label for="cf-message">Mensagem</label>
+      <textarea id="cf-message" name="message" class="cf-textarea" required></textarea>
     </div>
 
-    <div class="form-group">
-      <label for="phone">Telefone</label>
-      <input type="text" id="phone" name="phone" required>
-    </div>
-
-    <div class="form-group">
-      <label for="city">Cidade</label>
-      <input type="text" id="city" name="city" required>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="message">Mensagem</label>
-    <textarea id="message" name="message" required></textarea>
-  </div>
-
-  <button type="submit">Enviar</button>
-  <div id="form-result"></div>
-</form>
+    <button type="submit" class="cf-submit-btn">Enviar</button>
+    <div id="cf-result" class="cf-result"></div>
+  </form>
+</div>
 
 <script>
-  document.getElementById("contact-form").addEventListener("submit", function(e) {
+  document.getElementById("cf-form").addEventListener("submit", function(e) {
     e.preventDefault();
     const form = this;
-    const resultDiv = document.getElementById("form-result");
+    const resultDiv = document.getElementById("cf-result");
     const formData = new FormData(form);
     const obj = Object.fromEntries(formData);
     const json = JSON.stringify(obj);
