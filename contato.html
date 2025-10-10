@@ -205,19 +205,157 @@
 <div class="comments-form-wrapper clearfix">
 <div id="respond" class="comment-respond">
 <h3 id="reply-title" class="comment-reply-title">Envie seu orçamento ou dúvida </h3>
-<div id='tawk_68e7595a1d28b7195105c19d'></div>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date(); Tawk_API.embedded='tawk_68e7595a1d28b7195105c19d';
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/68e7595a1d28b7195105c19d/1j7703sfs';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);})();
+<!-- Inclua esse formulário onde quiser no seu site -->
+<style>
+  #contact-form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 16px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  #contact-form .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  #contact-form .form-row .form-group {
+    flex: 1 1 180px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #contact-form .form-row .form-group label {
+    font-size: 0.9em;
+    margin-bottom: 4px;
+    color: #555;
+  }
+
+  #contact-form .form-row .form-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95em;
+  }
+
+  #contact-form textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95em;
+    margin-top: 12px;
+  }
+
+  #contact-form button {
+    background-color: #03a84e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+
+  #contact-form button:hover {
+    background-color: #028a43;
+  }
+
+  @media (max-width: 600px) {
+    #contact-form .form-row {
+      flex-direction: column;
+    }
+    #contact-form .form-row .form-group {
+      width: 100%;
+    }
+  }
+
+  #form-result {
+    margin-top: 12px;
+    font-size: 0.95em;
+  }
+</style>
+
+<form id="contact-form" method="POST" action="https://api.web3forms.com/submit">
+  <input type="hidden" name="access_key" value="0f061e1a-6f7e-4aa1-8d52-5e70c1c7d15a">
+  <input type="hidden" name="subject" value="Nova mensagem do formulário">
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="name">Nome</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Telefone</label>
+      <input type="text" id="phone" name="phone" required>
+    </div>
+
+    <div class="form-group">
+      <label for="city">Cidade</label>
+      <input type="text" id="city" name="city" required>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="message">Mensagem</label>
+    <textarea id="message" name="message" required></textarea>
+  </div>
+
+  <button type="submit">Enviar</button>
+  <div id="form-result"></div>
+</form>
+
+<script>
+  document.getElementById("contact-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const form = this;
+    const resultDiv = document.getElementById("form-result");
+    const formData = new FormData(form);
+    const obj = Object.fromEntries(formData);
+    const json = JSON.stringify(obj);
+
+    resultDiv.style.color = "#333";
+    resultDiv.textContent = "Enviando...";
+
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: json
+    })
+    .then(async response => {
+      const res = await response.json();
+      if (response.ok) {
+        resultDiv.style.color = "green";
+        resultDiv.textContent = res.message || "Mensagem enviada com sucesso!";
+        form.reset();
+      } else {
+        resultDiv.style.color = "red";
+        resultDiv.textContent = res.message || "Erro ao enviar mensagem.";
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      resultDiv.style.color = "red";
+      resultDiv.textContent = "Erro no envio. Tente novamente.";
+    });
+  });
 </script>
-<!--End of Tawk.to Script-->
+
+
 </div><!-- #respond -->
 </div>
 </div>
