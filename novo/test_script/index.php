@@ -11,6 +11,7 @@
   SyntaxHighlighter.config.clipboardSwf = 'scripts/clipboard.swf';
   SyntaxHighlighter.all();
 </script>
+<link rel="stylesheet" type="text/css" href="https://turfgrass.com.br/estilo/wts.css">
 </head>
 <body >
 <?php

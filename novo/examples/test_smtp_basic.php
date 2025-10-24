@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>PHPMailer - SMTP basic test with authentication</title>
+<link rel="stylesheet" type="text/css" href="https://turfgrass.com.br/estilo/wts.css">
 </head>
 <body>
 

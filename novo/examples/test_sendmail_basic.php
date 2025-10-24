@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>PHPMailer - Sendmail basic test</title>
+<link rel="stylesheet" type="text/css" href="https://turfgrass.com.br/estilo/wts.css">
 </head>
 <body>
 
